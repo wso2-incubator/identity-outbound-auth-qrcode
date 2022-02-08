@@ -18,10 +18,13 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.gson.Gson" %>
+<%@ page import="java.nio.charset.Charset" %>
+<%@ page import="org.apache.commons.codec.binary.Base64" %>
 <%@ page import="org.wso2.carbon.identity.application.authentication.endpoint.util.AuthContextAPIClient" %>
 <%@ page import="org.wso2.carbon.identity.application.authentication.endpoint.util.Constants" %>
 <%@ page import="org.wso2.carbon.identity.core.util.IdentityCoreConstants" %>
 <%@ page import="org.wso2.carbon.identity.core.util.IdentityUtil" %>
+<%@ page import="org.wso2.carbon.identity.application.authentication.endpoint.util.EndpointConfigManager" %>
 <%@ page import="static org.wso2.carbon.identity.application.authentication.endpoint.util.Constants.STATUS" %>
 <%@ page import="static org.wso2.carbon.identity.application.authentication.endpoint.util.Constants.STATUS_MSG" %>
 <%@ page import="static org.wso2.carbon.identity.application.authentication.endpoint.util.Constants.CONFIGURATION_ERROR" %>
@@ -41,6 +44,11 @@
 <!doctype html>
 <html>
 <head>
+
+    <script language="JavaScript" type="text/javascript" src="libs/jquery_3.4.1/jquery-3.4.1.js"></script>
+    <script language="JavaScript" type="text/javascript" src="libs/bootstrap_3.4.1/js/bootstrap.min.js"></script>
+
+
     <!-- header -->
     <%
         File headerFile = new File(getServletContext().getRealPath("extensions/header.jsp"));
@@ -50,15 +58,14 @@
     <% } else { %>
         <jsp:include page="includes/header.jsp"/>
     <% } %>
-    <script src="js/gadget.js"></script>
-    <script src="js/qrCodeGenerator.js"></script>
+
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
 </head>
 
 <body class="login-portal layout authentication-portal-layout">
     <main class="center-segment">
-        <div class="ui container medium center aligned middle aligned">
+        <div class="ui container large center aligned middle aligned">
 
             <!-- product-title -->
             <%
@@ -70,23 +77,34 @@
                 <jsp:include page="includes/product-title.jsp"/>
             <% } %>
 
-            <div class="ui segment">
-                <h3 class="ui header">
-                    Authenticating with QR Code
-                </h3>
-                <h4 class="ui header">
-                    Scan this QR code using an authenticator app
-                </h4>
-                    <div style="display:flex; justify-content:center">
-                        <div class="ui center aligned basic segment" id="qrcode"></div>
-                    </div>
+            <div class="ui segment" style="display:flex">
+				<div class="ui left aligned basic segment">
+					<h3 class="ui header">
+						Login Using QR Code
+					</h3>
+					<h5 class="ui header">
+						1. Open the mobile app on your phone
+					</h5>
+					<h5 class="ui header">
+						2. Point your phone to this screen to capture the QR code
+					</h5>
+				</div>
+				<div>
+					<div class="ui center aligned basic segment" id="qrcode"></div>
+				</div>
+				
+				<form id="toCommonAuth" action="<%=commonauthURL%>" method="POST" style="display:none;">
+					<input type="hidden" name="ACTION" value="WaitResponse"/>
+					<input type="hidden" id="sessionDataKey" name="sessionDataKey">
+					<input type="hidden" id="proceedAuthorization" name="proceedAuthorization">
+				</form>
                 
                 
                 <script type="text/javascript">
                     var qrcode = new QRCode(document.getElementById("qrcode"), {
-                    text: 'sessionDataKey=<%=Encode.forHtmlAttribute(request.getParameter("sessionDataKey"))%>',
-                    width: 180,
-                    height: 180,
+                    text: 'sessionDataKey=<%=Encode.forHtmlAttribute(request.getParameter("sessionDataKey"))%>&tenantDomain=<%=Encode.forHtmlAttribute(request.getParameter("tenantDomain"))%>',
+                    width: 200,
+                    height: 200,
                     colorDark : "#000000",
                     colorLight : "#ffffff",
                     correctLevel : QRCode.CorrectLevel.H,
@@ -117,80 +135,84 @@
     <% } else { %>
         <jsp:include page="includes/footer.jsp"/>
     <% } %>
+	
+	<% 
+		String toEncode = EndpointConfigManager.getAppName() + ":" + String.valueOf(EndpointConfigManager.getAppPassword());
+		byte[] encoding = Base64.encodeBase64(toEncode.getBytes());
+		String authHeader = new String(encoding, Charset.defaultCharset());
+		String header = "Client " + authHeader;
+		System.out.println(header);
+	%>
 
     <script type="text/javascript">
+		
+		let i = 0;
+		let sessionDataKey;
+		const refreshInterval = 1000;
+		const timeout = 900000;
+		let qrEndpointWithQueryParams = "/qr-auth/check-status?sessionDataKey=";
+		const GET = 'GET';
+		
+		$(document).ready(function () {
+				
+			var startTime = new Date().getTime();
+			console.log("Start time: "+ startTime);
 
-        $(document).ready(function() {
-            var key =  document.getElementById("ske").value;
-            if(key != null) {
-                loadQRCode(key);
-            }
-        });
+			const intervalListener = window.setInterval(function () {
+				checkWaitStatus();
+				i++;
+				console.log("Polled times " + i)
+			}, refreshInterval);
 
-        let i = 0;
-        let sessionDataKey;
-        const refreshInterval = 1000;
-        const timeout = 900000;
-        let qrEndpointWithQueryParams = "<%=QRAuthenticatorConstants.QR_ENDPOINT +
-         QRAuthenticatorConstants.POLLING_QUERY_PARAMS%>";
-        const GET = 'GET';
+			function checkWaitStatus() {
+				const now = new Date().getTime();
+				if ((startTime + timeout) < now) {
+					window.clearInterval(intervalListener);
+					window.location.replace("retry.do?statusMsg=qr.auth.timed.out.message&status=qr.auth.timed.out");
+				}
 
-        $(document).ready(function () {
-            var startTime = new Date().getTime();
-            console.log("Start time: "+ startTime);
+				const urlParams = new URLSearchParams(window.location.search);
+				sessionDataKey = urlParams.get('sessionDataKey');
+				$.ajax(qrEndpointWithQueryParams + sessionDataKey, {
+					method: GET,
+					headers: {
+						"Authorization": "<%=header%>"
+					},
+					success: function (res) {
+						handleStatusResponse(res);
+					},
+					error: function () {
+						checkWaitStatus();
+					},
+					failure: function () {
+						window.clearInterval(intervalListener);
+						window.location.replace("/retry.do");
+					}
+				});
+			}
 
-            const intervalListener = window.setInterval(function () {
-                checkWaitStatus();
-                i++;
-                console.log("Polled ${i} times")
-            }, refreshInterval);
+			function handleStatusResponse(res) {
 
-            function checkWaitStatus() {
-                const now = new Date().getTime();
-                if ((startTime + timeout) < now) {
-                    window.clearInterval(intervalListener);
-                    window.location.replace("retry.do?statusMsg=qr.auth.timed.out.message&status=qr.auth.timed.out");
-                }
+				if ((res.status) === "COMPLETED") {
+					document.getElementById("proceedAuthorization").value = "proceed";
+					document.getElementById("sessionDataKey").value = sessionDataKey;
+					continueAuthentication(res);
+				} else {
+					console.log(res.status);
+					checkWaitStatus();
+				}
+			}
 
-                const urlParams = new URLSearchParams(window.location.search);
-                sessionDataKey = urlParams.get('sessionDataKey');
-                $.ajax(qrEndpointWithQueryParams + sessionDataKey, {
-                    async: false,
-                    cache : false,
-                    method: GET,
-                    success: function (res) {
-                        handleStatusResponse(res);
-                    },
-                    error: function () {
+			function continueAuthentication(res) {
+				console.log("Continuing Auth request");
 
-                        checkWaitStatus();
-                    },
-                    failure: function () {
-                        window.clearInterval(intervalListener);
-                        window.location.replace("/retry.do");
-                    }
-                });
-            }
+				window.clearInterval(intervalListener);
+				document.getElementById("toCommonAuth").submit();
+			}
 
-            function handleStatusResponse(res) {
 
-                if ((res.status) === "<%=QRAuthenticatorConstants.COMPLETED%>") {
-                    document.getElementById("proceedAuthorization").value = "proceed";
-                    document.getElementById("sessionDataKey").value = sessionDataKey;
-                    continueAuthentication(res);
-                } else {
-                    checkWaitStatus();
-                }
-            }
+		});
 
-            function continueAuthentication(res) {
-                console.log("Continuing Auth request");
-
-                window.clearInterval(intervalListener);
-                document.getElementById("toCommonAuth").submit();
-            }
-
-        });
  
     </script>
 

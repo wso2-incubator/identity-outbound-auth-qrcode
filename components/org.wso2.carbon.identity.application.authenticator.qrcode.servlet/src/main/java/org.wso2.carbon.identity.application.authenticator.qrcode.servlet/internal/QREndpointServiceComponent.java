@@ -62,8 +62,8 @@ public class QREndpointServiceComponent {
                     null, null);
             if (log.isDebugEnabled()) {
                 log.debug("QR endpoint service component activated."
-                        + "\n Authentication endpoint    : " + QRServletConstants.QR_AUTH_ENDPOINT
-                        + "\n Check status endpoint      : " + QRServletConstants.QR_AUTH_STATUS_ENDPOINT);
+                        + " Authentication endpoint    : " + QRServletConstants.QR_AUTH_ENDPOINT
+                        + " Check status endpoint      : " + QRServletConstants.QR_AUTH_STATUS_ENDPOINT);
             }
         } catch (Exception e) {
             log.error("Error when registering the qr endpoint via the HTTP service.", e);
