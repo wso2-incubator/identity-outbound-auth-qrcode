@@ -1,5 +1,5 @@
 <%--
-  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~ Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~ WSO2 Inc. licenses this file to you under the Apache License,
   ~ Version 2.0 (the "License"); you may not use this file except
@@ -44,10 +44,9 @@
 <!doctype html>
 <html>
 <head>
-
     <script language="JavaScript" type="text/javascript" src="libs/jquery_3.4.1/jquery-3.4.1.js"></script>
     <script language="JavaScript" type="text/javascript" src="libs/bootstrap_3.4.1/js/bootstrap.min.js"></script>
-
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
     <!-- header -->
     <%
@@ -58,8 +57,6 @@
     <% } else { %>
         <jsp:include page="includes/header.jsp"/>
     <% } %>
-
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
 </head>
 
@@ -98,8 +95,8 @@
 					<input type="hidden" id="sessionDataKey" name="sessionDataKey">
 					<input type="hidden" id="proceedAuthorization" name="proceedAuthorization">
 				</form>
-                
-                
+
+                <!-- display QR code -->
                 <script type="text/javascript">
                     var qrcode = new QRCode(document.getElementById("qrcode"), {
                     text: 'sessionDataKey=<%=Encode.forHtmlAttribute(request.getParameter("sessionDataKey"))%>&tenantDomain=<%=Encode.forHtmlAttribute(request.getParameter("tenantDomain"))%>',
@@ -198,7 +195,6 @@
 					document.getElementById("sessionDataKey").value = sessionDataKey;
 					continueAuthentication(res);
 				} else {
-					console.log(res.status);
 					checkWaitStatus();
 				}
 			}
@@ -209,11 +205,7 @@
 				window.clearInterval(intervalListener);
 				document.getElementById("toCommonAuth").submit();
 			}
-
-
 		});
-
- 
     </script>
 
 </body>

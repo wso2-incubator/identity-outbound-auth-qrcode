@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.carbon.identity.application.authenticator.qrcode;
 
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -28,8 +29,6 @@ import org.wso2.carbon.identity.application.authentication.framework.context.Aut
 import org.wso2.carbon.identity.application.authentication.framework.exception.AuthenticationFailedException;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.InboundConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
-//import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRJWTValidator;
-//import org.wso2.carbon.identity.application.authenticator.qrcode.common.exception.IdentityQRAuthException;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
 import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
 import org.wso2.carbon.identity.core.ServiceURLBuilder;
@@ -137,71 +136,12 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
             throw new AuthenticationFailedException(errorMessage);
         }
 
-//        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
-//        AuthenticationContext sessionContext = contextManager.getContext(request
-//                .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
-//        AuthDataDTO authDataDTO = (AuthDataDTO) sessionContext
-//                .getProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA);
-//
-//        String authResponseToken = authDataDTO.getAuthToken();
-//
-//        String deviceId = getDeviceIdFromToken(authResponseToken);
-//        String publicKey = getPublicKey(deviceId);
-//        String publicKey = "public key";
-//        QRJWTValidator validator = new QRJWTValidator();
-//        JWTClaimsSet claimsSet;
-//
-//        try {
-//            claimsSet = validator.getValidatedClaimSet(authResponseToken, publicKey);
-//        } catch (IdentityQRAuthException e) {
-//            String errorMessage = String
-//                    .format("Error occurred when trying to validate the JWT signature from device: %s.", deviceId);
-//            throw new AuthenticationFailedException(errorMessage, e);
-//        }
-//        if (claimsSet != null) {
-//
-//            String authStatus =
-//                    getClaimFromClaimSet(claimsSet, QRAuthenticatorConstants.TOKEN_RESPONSE, deviceId);
-//
-//            if (authStatus.equals(QRAuthenticatorConstants.AUTH_REQUEST_STATUS_SUCCESS)) {
-////                AuthenticatedUser authenticatedUserFromContext = getAuthenticatedUser(context);
-////                context.setSubject(authenticatedUserFromContext);
-//            } else {
-//                String errorMessage = String.format("Authentication failed! Auth status for user" +
-//                        " '%s' is not available in JWT.",
-//                        getClaimFromClaimSet(claimsSet, QRAuthenticatorConstants.TOKEN_USER_NAME, deviceId));
-//                throw new AuthenticationFailedException(errorMessage);
-//            }
-//        } else {
-//            String errorMessage = String
-//                    .format("Authentication failed! JWT signature is not valid for device: %s", deviceId);
-//            throw new AuthenticationFailedException(errorMessage);
-//        }
-//        contextManager.clearContext(getClaimFromClaimSet(claimsSet,
-//                QRAuthenticatorConstants.TOKEN_SESSION_DATA_KEY, deviceId));
+        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
+        AuthenticationContext sessionContext = contextManager.getContext(request
+                .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
+        AuthDataDTO authDataDTO = (AuthDataDTO) sessionContext
+                .getProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA);
     }
-
-    /**
-     * Returns AuthenticatedUser object from context.
-     *
-     * @param context AuthenticationContext.
-     * @return AuthenticatedUser
-     */
-//    public static AuthenticatedUser getAuthenticatedUser(AuthenticationContext context) {
-//
-//        AuthenticatedUser authenticatedUser = null;
-//        Map<Integer, StepConfig> stepConfigMap = context.getSequenceConfig().getStepMap();
-//        if (stepConfigMap != null) {
-//            for (StepConfig stepConfig : stepConfigMap.values()) {
-//                AuthenticatedUser authenticatedUserInStepConfig = stepConfig.getAuthenticatedUser();
-//                if (stepConfig.isSubjectAttributeStep() && authenticatedUserInStepConfig != null) {
-//                    authenticatedUser = new AuthenticatedUser(stepConfig.getAuthenticatedUser());
-//                    break;
-//                }
-//            }
-//        }
-//        return authenticatedUser;
-//    }
 
     /**
      * Derive the Device ID from the auth response token header.
@@ -241,27 +181,6 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
             throw new AuthenticationFailedException(errorMessage, e);
         }
     }
-
-//    private AbstractUserStoreManager getUserStoreManager(String username, String tenantDomain)
-//            throws AuthenticationFailedException {
-//
-//        try {
-//            int tenantId =
-//                    QRAuthenticatorServiceComponent.getRealmService().getTenantManager().getTenantId(tenantDomain);
-//            UserRealm userRealm = QRAuthenticatorServiceComponent.getRealmService().getTenantUserRealm(tenantId);
-//            if (userRealm != null) {
-//                return (AbstractUserStoreManager) userRealm.getUserStoreManager();
-//            } else {
-//                throw new AuthenticationFailedException("Cannot find the user realm for the given tenant: " +
-//                        tenantId, User.getUserFromUserName(username));
-//            }
-//        } catch (org.wso2.carbon.user.api.UserStoreException e) {
-//            if (log.isDebugEnabled()) {
-//                log.debug("Can't find the UserStoreManager for the user: " + username, e);
-//            }
-//            throw new AuthenticationFailedException(e.getMessage(), e);
-//        }
-//    }
 
     /**
      * Check whether status of retrying authentication.
