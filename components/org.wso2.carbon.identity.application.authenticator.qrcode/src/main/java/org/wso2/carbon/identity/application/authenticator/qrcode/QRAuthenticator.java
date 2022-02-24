@@ -28,6 +28,7 @@ import org.wso2.carbon.identity.application.authentication.framework.LocalApplic
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authentication.framework.exception.AuthenticationFailedException;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.InboundConstants;
+import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
 import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
@@ -91,7 +92,7 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
             throws AuthenticationFailedException {
 
         try {
-            String qrPage = ServiceURLBuilder.create().addPath(QRAuthenticatorConstants.LOGIN_PAGE)
+            String qrPage = ServiceURLBuilder.create().addPath(QRAuthenticatorConstants.QR_PAGE)
                     .addParameter(QRAuthenticatorConstants.SESSION_DATA_KEY, sessionDataKey)
                     .addParameter(QRAuthenticatorConstants.TENANT_DOMAIN, tenantDomain)
                     .addParameter("AuthenticatorName", QRAuthenticatorConstants.AUTHENTICATOR_FRIENDLY_NAME)
@@ -119,67 +120,19 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
     protected void processAuthenticationResponse(HttpServletRequest request, HttpServletResponse response,
                                                  AuthenticationContext context) throws AuthenticationFailedException {
 
-        String tenantDomainFromRequest = request.getParameter(QRAuthenticatorConstants.TENANT_DOMAIN);
-        String tenantDomainFromContext = context.getTenantDomain();
-
-        if (!tenantDomainFromRequest.equals(tenantDomainFromContext)) {
-            String errorMessage = String
-                    .format("Authentication failed due to tenant domain mismatch: %s, %s",
-                            tenantDomainFromRequest, tenantDomainFromContext);
-            throw new AuthenticationFailedException(errorMessage);
-        }
-
-        String bearerToken = request.getHeader("Authorization");
-
-        if (StringUtils.isBlank(bearerToken)) {
-            String errorMessage = String.format("Authentication failed!. Empty bearer token");
-            throw new AuthenticationFailedException(errorMessage);
-        }
-
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
         AuthenticationContext sessionContext = contextManager.getContext(request
                 .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
         AuthDataDTO authDataDTO = (AuthDataDTO) sessionContext
                 .getProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA);
-    }
 
-    /**
-     * Derive the Device ID from the auth response token header.
-     *
-     * @param token Auth response token.
-     * @return Device ID.
-     * @throws AuthenticationFailedException if the token string fails to parse to JWT.
-     */
-    protected String getDeviceIdFromToken(String token) throws AuthenticationFailedException {
+        String username = authDataDTO.getUsername();
+        String tenantDomain = authDataDTO.getTenantDomain();
 
-        try {
-            return String.valueOf(JWTParser.parse(token).getHeader()
-                    .getCustomParam(QRAuthenticatorConstants.TOKEN_DEVICE_ID));
-        } catch (ParseException e) {
-            throw new AuthenticationFailedException("Error occurred when trying to get the device ID from the "
-                    + "auth response token.", e);
-        }
-    }
-
-    /**
-     * Get JWT claim from the claim set.
-     *
-     * @param claimsSet JWT claim set.
-     * @param claim     Required claim.
-     * @param deviceId  Device ID.
-     * @return Claim string.
-     * @throws AuthenticationFailedException if an error occurs while getting a claim.
-     */
-    protected String getClaimFromClaimSet(JWTClaimsSet claimsSet, String claim, String deviceId)
-            throws AuthenticationFailedException {
-
-        try {
-            return claimsSet.getStringClaim(claim);
-        } catch (ParseException e) {
-            String errorMessage = String.format("Failed to get %s from the auth response token received from device: "
-                    + "%s.", claim, deviceId);
-            throw new AuthenticationFailedException(errorMessage, e);
-        }
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+        authenticatedUser.setUserName(username);
+        authenticatedUser.setTenantDomain(tenantDomain);
+        context.setSubject(authenticatedUser);
     }
 
     /**

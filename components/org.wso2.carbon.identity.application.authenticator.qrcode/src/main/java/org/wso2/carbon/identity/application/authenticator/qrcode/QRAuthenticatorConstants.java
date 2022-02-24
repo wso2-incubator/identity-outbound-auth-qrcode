@@ -23,7 +23,7 @@ package org.wso2.carbon.identity.application.authenticator.qrcode;
  */
 public abstract class QRAuthenticatorConstants {
 
-    public static final String AUTHENTICATOR_NAME = "org/wso2/carbon/identity/application/authenticator/qrcode";
+    public static final String AUTHENTICATOR_NAME = "qrcode";
     public static final String AUTHENTICATOR_FRIENDLY_NAME = "QRCodeBased";
     public static final String USER_NAME = "username";
     public static final String QR_PAGE = "/authenticationendpoint/qrpage.jsp";

@@ -30,6 +30,8 @@ import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRA
 import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.QRServletConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.store.QRDataStore;
+import org.wso2.carbon.user.core.util.UserCoreUtil;
+import org.wso2.carbon.context.CarbonContext;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -65,6 +67,10 @@ public class QRServlet extends HttpServlet {
 
         JsonObject json = new JsonParser().parse(request.getReader().readLine()).getAsJsonObject();
         JsonObject responseData = json.get(QRServletConstants.AUTH_RESPONSE).getAsJsonObject();
+//        String header = request.getHeader("Authorization");
+//        if (header != null && !header.startsWith("Bearer ")) {
+//
+//        }
 
         if (responseData.get(QRServletConstants.SESSION_DATA_KEY).isJsonNull()) {
             if (log.isDebugEnabled()) {
@@ -77,6 +83,7 @@ public class QRServlet extends HttpServlet {
             String sessionDataKey = responseData.get(QRServletConstants.SESSION_DATA_KEY).getAsString();
             String tenantDomain = responseData.get(QRServletConstants.TENANT_DOMAIN).getAsString();
             String clientID = responseData.get(QRServletConstants.CLIENT_ID).getAsString();
+            String username = getTenantQualifiedUsername();
 
             if (StringUtils.isEmpty(sessionDataKey)) {
                 String errorMessage = String.format(
@@ -87,7 +94,7 @@ public class QRServlet extends HttpServlet {
                 }
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, errorMessage);
             } else {
-                addToContext(sessionDataKey, tenantDomain, clientID);
+                addToContext(sessionDataKey, tenantDomain, clientID, username);
                 String status = QRServletConstants.Status.COMPLETED.name();
                 qrDataStoreInstance.updateAuthStatus(sessionDataKey, status);
 
@@ -107,7 +114,7 @@ public class QRServlet extends HttpServlet {
      * @param tenantDomain   tenant domain of the mobile application
      * @param clientID client ID of the mobile application
      */
-    private void addToContext(String sessionDataKey, String tenantDomain, String clientID) {
+    private void addToContext(String sessionDataKey, String tenantDomain, String clientID, String username) {
 
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
         AuthenticationContext context = contextManager.getContext(sessionDataKey);
@@ -115,7 +122,14 @@ public class QRServlet extends HttpServlet {
         AuthDataDTO authDataDTO = (AuthDataDTO) context.getProperty(QRServletConstants.AUTH_DATA);
         authDataDTO.setTenantDomain(tenantDomain);
         authDataDTO.setClientID(clientID);
+        authDataDTO.setUsername(username);
         context.setProperty(QRServletConstants.AUTH_DATA, authDataDTO);
         contextManager.storeContext(sessionDataKey, context);
+    }
+
+    private String getTenantQualifiedUsername() {
+
+        return UserCoreUtil.addTenantDomainToEntry(CarbonContext.getThreadLocalCarbonContext().getUsername(),
+                CarbonContext.getThreadLocalCarbonContext().getTenantDomain());
     }
 }

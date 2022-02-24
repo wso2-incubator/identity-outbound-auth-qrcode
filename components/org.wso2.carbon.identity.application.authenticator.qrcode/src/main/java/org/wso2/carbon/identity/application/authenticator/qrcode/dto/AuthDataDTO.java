@@ -29,6 +29,7 @@ public class AuthDataDTO implements Serializable {
     private static final long serialVersionUID = 5355319579322887235L;
     private String tenantDomain;
     private String clientID;
+    private String username;
 
     public void setTenantDomain(String tenantDomain) {
 
@@ -48,5 +49,15 @@ public class AuthDataDTO implements Serializable {
     public String getClientID() {
 
         return this.clientID;
+    }
+
+    public void setUsername(String username) {
+
+        this.username = username;
+    }
+
+    public String getUsername() {
+
+        return this.username;
     }
 }

@@ -351,5 +351,6 @@
         <org.osgi.framework.version.range>[1.8,2)</org.osgi.framework.version.range>
         <nimbusds.osgi.version.range>[7.3.0,8.0.0)</nimbusds.osgi.version.range>
         <javax.version.range>[2.6,3)</javax.version.range>
+        <carbon.kernel.package.import.version.range>[4.4.0, 5.0.0)</carbon.kernel.package.import.version.range>
     </properties>
 </project>
