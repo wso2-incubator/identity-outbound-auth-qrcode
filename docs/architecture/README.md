@@ -57,7 +57,8 @@ functionalities handled are;
 Given below is a high level architecture diagram of all the functionalities handled by the QR authenticator components
 at different levels.
 
-<img src="C:\Users\isurika\Downloads\sequence diagram.drawio (6).png"/>
+![sequence diagram drawio (6)](https://user-images.githubusercontent.com/64022205/160332855-fa17f7ba-3f88-4b42-8dab-9c015b757301.png)
+
 
 ## Sample Requests
 Requests used for authentication are as follows
