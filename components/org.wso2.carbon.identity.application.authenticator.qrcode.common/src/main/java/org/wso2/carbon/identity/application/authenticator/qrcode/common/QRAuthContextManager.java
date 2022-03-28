@@ -29,23 +29,23 @@ public interface QRAuthContextManager {
     /**
      * Store authentication context.
      *
-     * @param key     Unique key for identifying the authentication context for the session
-     * @param context Authentication context
+     * @param key     Unique key for identifying the authentication context for the session.
+     * @param context Authentication context.
      */
     void storeContext(String key, AuthenticationContext context);
 
     /**
      * Get stored authentication context.
      *
-     * @param key Unique key for identifying the authentication context for the session
-     * @return Authentication context stored under unique key
+     * @param key Unique key for identifying the authentication context for the session.
+     * @return Authentication context stored under unique key.
      */
     AuthenticationContext getContext(String key);
 
     /**
      * Remove the authentication context from storage to end its usage.
      *
-     * @param key Unique key for identifying the authentication context for the session
+     * @param key Unique key for identifying the authentication context for the session.
      */
     void clearContext(String key);
 }

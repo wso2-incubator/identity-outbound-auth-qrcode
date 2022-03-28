@@ -16,5 +16,39 @@ phone (with an active data connection) can act as a helper device to authenticat
 application by scanning the QR code displayed in the web login screen by using the scanner in the mobile app.
 Therefore, this QR code authentication will balance the usability and security without affecting user privacy.
 
-## Documentation 
+## Documentation
+
+
+## Documentation
+
+For installing the qrcode-based authentication extension<br/>
+- [Installation Guide](docs/installation/README.md)
+
+For enabling qrcode-based authentication and using it as a single-factor authentication mechanism<br/>
+- [Identity Developer Setup Guide](docs/identity-dev-guide/README.md)
+
+For understanding the architecture and components of the qrcode-based authenticator<br/>
+- [Architecture Documentation](docs/architecture/README.md)
+
+For developing mobile apps for qrcode-based authentication<br/>
+- [React Native SDK Documentation](samples/sample-mobile-app/sdk/README.md)
+
+
+## Contribute
+
+Please read [Contributing to the Code Base](http://wso2.github.io/) for details on our code of conduct, and the process
+for submitting pull requests to us.
+
+### Reporting Issues
+
+We encourage you to report issues, improvements, and feature requests creating
+[Github Issues](https://github.com/wso2-extensions/identity-outbound-auth-qrcode/issues).
+
+Important: And please be advised that security issues must be reported to security@wso2.com, not as GitHub issues,
+in order to reach the proper audience. We strongly advise following the WSO2 Security Vulnerability Reporting Guidelines
+when reporting the security issues.
+
+## License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
  
