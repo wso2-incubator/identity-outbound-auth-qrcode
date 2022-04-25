@@ -1,0 +1,7 @@
+{
+    "clientID": "uq3OFqKaJeU5BFjCWIaBkz6Vv4ca",
+    "serverOrigin": "https://192.168.1.4:9443",
+    "signInRedirectURL": "https://localhost:5000",
+    "signOutRedirectURL": "https://localhost:5000",
+    "validateIDToken": false
+}
