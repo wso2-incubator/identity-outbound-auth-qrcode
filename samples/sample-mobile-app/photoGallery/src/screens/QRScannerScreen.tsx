@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,8 +16,7 @@
  * under the License.
  */
 
-import React, {useEffect} from 'react';
-import {StyleSheet, StatusBar, Button, View, Text} from 'react-native';
+import React from 'react';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import { useLoginContext } from "../../context/LoginContext";
@@ -28,8 +27,7 @@ const QRScannerScreen = ({ navigation }) => {
 
     const { loginState, setLoginState, loading, setLoading } = useLoginContext();
 
-    let onSuccess = (e) => {
-        console.log('Scanned: ', e.data);
+    let onSuccess = (qrData) => {
 
         ReactNativeBiometrics.isSensorAvailable().then(resultObject => {
             const {available, biometryType} = resultObject;
@@ -51,7 +49,7 @@ const QRScannerScreen = ({ navigation }) => {
                 
                     if (success) {
                         console.log('successful biometrics provided');
-                        sendRequestToSDK(e);
+                        sendRequestToSDK(qrData);
                 
                     } else {
                         console.log('user cancelled biometric prompt');
@@ -68,14 +66,10 @@ const QRScannerScreen = ({ navigation }) => {
                 console.log('Biometrics not supported');
             }
         });
-        
-        
     };
 
-    let sendRequestToSDK = (e) => {
-        let authData = AuthorizationService.processAuthRequest(e.data);
-        console.log('got authData');
-        console.log("access token : "+loginState.accessToken);
+    let sendRequestToSDK = (qrData) => {
+        let authData = AuthorizationService.processAuthRequest(qrData.data);
         AuthorizationService.sendAuthRequest(authData, loginState.accessToken, 'SUCCESSFUL')
             .then((res) => {
                 let response = JSON.parse(res);

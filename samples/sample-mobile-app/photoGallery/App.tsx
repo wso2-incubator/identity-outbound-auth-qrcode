@@ -28,12 +28,8 @@ import HomeScreen from './src/screens/HomeScreen';
 import Icon from "react-native-vector-icons/FontAwesome";
 import {StyleSheet, StatusBar, Button, View, Text} from 'react-native';
 import MainScreen from './src/screens/MainScreen';
-import {DeviceInfoUtil} from '@wso2/auth-qr-react-native';
 
 const Stack = createNativeStackNavigator();
-
-// Initialize device information
-new DeviceInfoUtil();
 
 const App = () => {
   return (

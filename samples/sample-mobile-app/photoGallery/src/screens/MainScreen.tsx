@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -17,16 +17,11 @@
  */
 
  import React from 'react';
- import { useAuthContext } from "@asgardeo/auth-react-native";
- import { useLoginContext } from "../../context/LoginContext";
- import {View, StyleSheet, StatusBar, Image} from 'react-native';
- import GridImageView from 'react-native-grid-image-viewer';
- import { NavigationContainer } from '@react-navigation/native';
+ import {StyleSheet, Image} from 'react-native';
  import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
  import HomeScreen from './HomeScreen';
  import QRScannerScreen from './QRScannerScreen';
 import GalleryScreen from './GalleryScreen';
-import DevicesScreen from './DevicesScreen';
  
  const Tab = createBottomTabNavigator();
  
