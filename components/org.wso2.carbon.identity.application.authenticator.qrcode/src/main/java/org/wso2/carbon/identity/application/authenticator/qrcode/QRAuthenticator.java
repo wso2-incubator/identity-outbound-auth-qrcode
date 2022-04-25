@@ -71,10 +71,16 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
                                                  AuthenticationContext context) throws AuthenticationFailedException {
 
         String tenantDomain = context.getTenantDomain();
-        String sessionDataKey = request.getParameter(InboundConstants.RequestProcessor.CONTEXT_KEY);
+        String sessionDataKey = request.getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY);
 
-        AuthDataDTO authDataDTO = new AuthDataDTO();
-        context.setProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA, authDataDTO);
+//        AuthDataDTO authDataDTO = new AuthDataDTO();
+//        context.setProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA, authDataDTO);
+//        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
+//        contextManager.storeContext(sessionDataKey, context);
+
+        String authStatus = QRAuthenticatorConstants.Status.PENDING.name();
+        context.setProperty(QRAuthenticatorConstants.AUTH_STATUS, authStatus);
+
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
         contextManager.storeContext(sessionDataKey, context);
 
@@ -88,7 +94,7 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
      * @param sessionDataKey The session data key.
      * @throws AuthenticationFailedException  If unable to redirect user to login page.
      */
-    private void redirectQRPage(HttpServletResponse response, String sessionDataKey, String tenantDomain)
+    protected void redirectQRPage(HttpServletResponse response, String sessionDataKey, String tenantDomain)
             throws AuthenticationFailedException {
 
         try {
@@ -100,39 +106,43 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
             response.sendRedirect(qrPage);
 
         } catch (IOException e) {
-            String errorMessage = String.format("Error occurred when trying to to redirect user to the login page.");
+            String errorMessage = "Error occurred when trying to to redirect user to the login page.";
             throw new AuthenticationFailedException(errorMessage, e);
         } catch (URLBuilderException e) {
-            String errorMessage = String.format("Error occurred when building the URL for the login page for user.");
+            String errorMessage = "Error occurred when building the URL for the login page for user.";
             throw new AuthenticationFailedException(errorMessage, e);
         }
     }
 
     /**
-     * This method is overridden to check validation of the given token and authenticate user.
+     * This method is overridden to authenticate user.
      *
      * @param request  The http servlet request.
      * @param response The http servlet response.
      * @param context  AuthenticationContext.
-     * @throws AuthenticationFailedException Authentication process failed for user.
      */
     @Override
     protected void processAuthenticationResponse(HttpServletRequest request, HttpServletResponse response,
-                                                 AuthenticationContext context) throws AuthenticationFailedException {
+                                                 AuthenticationContext context) {
 
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
         AuthenticationContext sessionContext = contextManager.getContext(request
                 .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
-        AuthDataDTO authDataDTO = (AuthDataDTO) sessionContext
-                .getProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA);
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) sessionContext
+                .getProperty(QRAuthenticatorConstants.AUTHENTICATED_USER);
 
-        String username = authDataDTO.getUsername();
-        String tenantDomain = authDataDTO.getTenantDomain();
+//        AuthDataDTO authDataDTO = (AuthDataDTO) sessionContext
+//                .getProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA);
+//
+//        String username = authDataDTO.getUsername();
+//        String tenantDomain = authDataDTO.getTenantDomain();
 
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setUserName(username);
-        authenticatedUser.setTenantDomain(tenantDomain);
+//        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+//        authenticatedUser.setUserName(username);
+//        authenticatedUser.setTenantDomain(tenantDomain);
+
         context.setSubject(authenticatedUser);
+
     }
 
     /**

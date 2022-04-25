@@ -25,19 +25,22 @@ public abstract class QRAuthenticatorConstants {
 
     public static final String AUTHENTICATOR_NAME = "qrcode";
     public static final String AUTHENTICATOR_FRIENDLY_NAME = "QRCodeBased";
-    public static final String USER_NAME = "username";
     public static final String QR_PAGE = "/authenticationendpoint/qrpage.jsp";
-    public static final String QR_MULTI_OPTION_PAGE = "/authenticationendpoint/qr-multioption.jsp";
-    public static final String LOGIN_PAGE = "/authenticationendpoint/login.jsp";
+    public static final String SUPER_TENANT_DOMAIN = "carbon.super";
     public static final String PROCEED_AUTH = "proceedAuthorization";
     public static final String SESSION_DATA_KEY = "sessionDataKey";
     public static final String TENANT_DOMAIN = "tenantDomain";
     public static final String CONTEXT_AUTH_DATA = "authData";
-    public static final String TOKEN_DEVICE_ID = "deviceId";
+    public static final String AUTH_STATUS = "authStatus";
+    public static final String AUTHENTICATED_USER = "authUser";
     public static final String QR_ENDPOINT = "/qr-auth/check-status";
     public static final String POLLING_QUERY_PARAMS = "?sessionDataKey=";
-    public static final String TOKEN_USER_NAME = "usr";
-    public static final String TOKEN_RESPONSE = "res";
-    public static final String TOKEN_SESSION_DATA_KEY = "sid";
     public static final String AUTH_REQUEST_STATUS_SUCCESS = "SUCCESSFUL";
+
+    /**
+     * Object holding authentication mobile response status.
+     */
+    public enum Status {
+        COMPLETED, PENDING
+    }
 }

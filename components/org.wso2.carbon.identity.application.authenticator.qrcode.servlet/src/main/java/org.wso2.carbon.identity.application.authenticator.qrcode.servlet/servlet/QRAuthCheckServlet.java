@@ -21,7 +21,11 @@ package org.wso2.carbon.identity.application.authenticator.qrcode.servlet.servle
 import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.InboundConstants;
+import org.wso2.carbon.identity.application.authenticator.qrcode.QRAuthenticatorConstants;
+import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
+import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.QRServletConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.model.WaitStatus;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.store.QRDataStore;
@@ -40,13 +44,13 @@ public class QRAuthCheckServlet extends HttpServlet {
 
     private static final Log log = LogFactory.getLog(QRAuthCheckServlet.class);
     private static final long serialVersionUID = -913670970043040923L;
-    private final QRDataStore pushDataStoreInstance = QRDataStore.getInstance();
+    private final QRDataStore qrDataStoreInstance = QRDataStore.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
-        if (!(request.getParameterMap().containsKey(InboundConstants.RequestProcessor.CONTEXT_KEY))) {
+        if (!(request.getParameterMap().containsKey(QRServletConstants.SESSION_DATA_KEY))) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
             if (log.isDebugEnabled()) {
@@ -63,7 +67,7 @@ public class QRAuthCheckServlet extends HttpServlet {
      *
      * @param request  HTTP request
      * @param response HTTP response
-     * @throws IOException
+     * @throws IOException When accessing writer.
      */
     private void handleWebResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -72,9 +76,16 @@ public class QRAuthCheckServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(QRServletConstants.MEDIA_TYPE_JSON);
 
-        String sessionDataKeyWeb = request.getParameter(InboundConstants.RequestProcessor.CONTEXT_KEY);
-        String status = pushDataStoreInstance.getAuthStatus(sessionDataKeyWeb);
-        if (status == null) {
+        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
+        AuthenticationContext sessionContext = contextManager.getContext(request
+                .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
+        String status = String.valueOf(sessionContext.getProperty(QRServletConstants.AUTH_STATUS));
+//        String status = qrDataStoreInstance.getAuthStatus(sessionDataKeyWeb);
+//        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
+//        AuthenticationContext context = contextManager.getContext(sessionDataKeyWeb);
+
+        if (status.equals(QRServletConstants.Status.PENDING.name())) {
+ //       if (status == null) {
             waitStatus.setStatus(QRServletConstants.Status.PENDING.name());
 
             if (log.isDebugEnabled()) {
@@ -82,7 +93,7 @@ public class QRAuthCheckServlet extends HttpServlet {
             }
         } else if (status.equals(QRServletConstants.Status.COMPLETED.name())) {
             waitStatus.setStatus(QRServletConstants.Status.COMPLETED.name());
-            pushDataStoreInstance.removeQRData(sessionDataKeyWeb);
+ //           qrDataStoreInstance.removeQRData(sessionDataKeyWeb);
 
             if (log.isDebugEnabled()) {
                 log.debug("Mobile authentication has been received. Proceeding to authenticate.");
