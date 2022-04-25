@@ -1,0 +1,14 @@
+{
+    "command": {
+        "version": {
+            "message": "[Asgardeo Release] [GitHub Actions] [Release %s] Bump version"
+        }
+    },
+    "npmClient": "yarn",
+    "packages": [
+        "lib",
+        "samples/*"
+    ],
+    "version": "0.2.15",
+    "useWorkspaces": true
+}
