@@ -1,2 +1,0 @@
-# sample-mobile-app
- 
