@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,8 +16,6 @@
  * under the License.
  */
 
-
-import {KJUR} from "jsrsasign";
 import uuid from "uuid-random";
 import {AuthRequestInterface} from "../models";
 import {DateTimeUtil, RequestSenderUtil} from "../utils";
@@ -27,7 +25,7 @@ export class AuthorizationService {
     /**
      * Process the request as an organized object.
      *
-     * @param request JSON object of the request
+     * @param request JSON object of the request.
      */
     public static processAuthRequest(
         request: any
@@ -56,9 +54,9 @@ export class AuthorizationService {
     /**
      * Send the request to the IS to allow or deny authorization.
      *
-     * @param authRequest Object for the authentication request
-     * @param token Access token of the user
-     * @param response Authorisation response given by the user
+     * @param authRequest Object for the authentication request.
+     * @param token Access token of the user.
+     * @param response Authorisation response given by the user.
      */
     public static async sendAuthRequest(
         authRequest: AuthRequestInterface,
