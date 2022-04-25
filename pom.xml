@@ -99,6 +99,11 @@
                 <version>${identity.framework.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.identity.framework</groupId>
+                <artifactId>org.wso2.carbon.identity.event</artifactId>
+                <version>${identity.framework.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon.identity.application.authenticator.qrcode</groupId>
                 <artifactId>org.wso2.carbon.authenticator.qrcode.common</artifactId>
                 <version>${project.version}</version>
@@ -244,6 +249,31 @@
                 <artifactId>spring-web</artifactId>
                 <version>${spring.web.version}</version>
             </dependency>
+            <!--Test Dependencies-->
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.agent</artifactId>
+                <classifier>runtime</classifier>
+                <version>${jacoco.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-testng -->
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-testng</artifactId>
+                <version>${powermock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito</artifactId>
+                <version>${powermock.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -352,5 +382,12 @@
         <nimbusds.osgi.version.range>[7.3.0,8.0.0)</nimbusds.osgi.version.range>
         <javax.version.range>[2.6,3)</javax.version.range>
         <carbon.kernel.package.import.version.range>[4.4.0, 5.0.0)</carbon.kernel.package.import.version.range>
+
+        <!--Test Dependencies-->
+        <testng.version>6.9.10</testng.version>
+        <jacoco.version>0.7.9</jacoco.version>
+        <powermock.version>1.6.5</powermock.version>
+        <slf4j.api.version>1.7.12</slf4j.api.version>
+        <maven.surefire.plugin.version>2.19.1</maven.surefire.plugin.version>
     </properties>
 </project>
