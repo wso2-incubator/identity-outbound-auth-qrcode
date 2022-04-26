@@ -148,7 +148,6 @@
                         <Export-Package>
                             !org.wso2.carbon.identity.application.authenticator.qrcode.internal,
                             org.wso2.carbon.identity.application.authenticator.qrcode,
-                            org.wso2.carbon.identity.application.authenticator.qrcode.dto,
                         </Export-Package>
                     </instructions>
                 </configuration>

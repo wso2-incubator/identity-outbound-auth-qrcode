@@ -22,17 +22,14 @@ import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
-import org.wso2.carbon.identity.application.authentication.framework.inbound.InboundConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.QRAuthenticatorConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.QRServletConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.model.WaitStatus;
-import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.store.QRDataStore;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +41,6 @@ public class QRAuthCheckServlet extends HttpServlet {
 
     private static final Log log = LogFactory.getLog(QRAuthCheckServlet.class);
     private static final long serialVersionUID = -913670970043040923L;
-    private final QRDataStore qrDataStoreInstance = QRDataStore.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -80,12 +76,8 @@ public class QRAuthCheckServlet extends HttpServlet {
         AuthenticationContext sessionContext = contextManager.getContext(request
                 .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
         String status = String.valueOf(sessionContext.getProperty(QRServletConstants.AUTH_STATUS));
-//        String status = qrDataStoreInstance.getAuthStatus(sessionDataKeyWeb);
-//        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
-//        AuthenticationContext context = contextManager.getContext(sessionDataKeyWeb);
 
         if (status.equals(QRServletConstants.Status.PENDING.name())) {
- //       if (status == null) {
             waitStatus.setStatus(QRServletConstants.Status.PENDING.name());
 
             if (log.isDebugEnabled()) {
@@ -93,7 +85,6 @@ public class QRAuthCheckServlet extends HttpServlet {
             }
         } else if (status.equals(QRServletConstants.Status.COMPLETED.name())) {
             waitStatus.setStatus(QRServletConstants.Status.COMPLETED.name());
- //           qrDataStoreInstance.removeQRData(sessionDataKeyWeb);
 
             if (log.isDebugEnabled()) {
                 log.debug("Mobile authentication has been received. Proceeding to authenticate.");

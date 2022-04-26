@@ -18,25 +18,19 @@
 
 package org.wso2.carbon.identity.application.authenticator.qrcode;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.JWTParser;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.authentication.framework.AbstractApplicationAuthenticator;
 import org.wso2.carbon.identity.application.authentication.framework.LocalApplicationAuthenticator;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authentication.framework.exception.AuthenticationFailedException;
-import org.wso2.carbon.identity.application.authentication.framework.inbound.InboundConstants;
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
-import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
 import org.wso2.carbon.identity.core.ServiceURLBuilder;
 import org.wso2.carbon.identity.core.URLBuilderException;
 
 import java.io.IOException;
-import java.text.ParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -72,11 +66,6 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
 
         String tenantDomain = context.getTenantDomain();
         String sessionDataKey = request.getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY);
-
-//        AuthDataDTO authDataDTO = new AuthDataDTO();
-//        context.setProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA, authDataDTO);
-//        QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
-//        contextManager.storeContext(sessionDataKey, context);
 
         String authStatus = QRAuthenticatorConstants.Status.PENDING.name();
         context.setProperty(QRAuthenticatorConstants.AUTH_STATUS, authStatus);
@@ -130,16 +119,6 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
                 .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) sessionContext
                 .getProperty(QRAuthenticatorConstants.AUTHENTICATED_USER);
-
-//        AuthDataDTO authDataDTO = (AuthDataDTO) sessionContext
-//                .getProperty(QRAuthenticatorConstants.CONTEXT_AUTH_DATA);
-//
-//        String username = authDataDTO.getUsername();
-//        String tenantDomain = authDataDTO.getTenantDomain();
-
-//        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-//        authenticatedUser.setUserName(username);
-//        authenticatedUser.setTenantDomain(tenantDomain);
 
         context.setSubject(authenticatedUser);
 

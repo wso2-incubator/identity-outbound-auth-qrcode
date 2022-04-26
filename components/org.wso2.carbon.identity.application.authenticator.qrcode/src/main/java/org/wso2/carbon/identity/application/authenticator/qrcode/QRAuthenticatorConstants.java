@@ -30,7 +30,6 @@ public abstract class QRAuthenticatorConstants {
     public static final String PROCEED_AUTH = "proceedAuthorization";
     public static final String SESSION_DATA_KEY = "sessionDataKey";
     public static final String TENANT_DOMAIN = "tenantDomain";
-    public static final String CONTEXT_AUTH_DATA = "authData";
     public static final String AUTH_STATUS = "authStatus";
     public static final String AUTHENTICATED_USER = "authUser";
     public static final String QR_ENDPOINT = "/qr-auth/check-status";

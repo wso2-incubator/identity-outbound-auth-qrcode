@@ -26,17 +26,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
-import org.wso2.carbon.identity.application.authenticator.qrcode.QRAuthenticatorConstants;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
-import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.QRServletConstants;
-import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.store.QRDataStore;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
 import org.wso2.carbon.context.CarbonContext;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +44,6 @@ public class QRServlet extends HttpServlet {
 
     private static final long serialVersionUID = -2050679246736808648L;
     private static final Log log = LogFactory.getLog(QRServlet.class);
-    private final QRDataStore qrDataStoreInstance = QRDataStore.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -93,7 +88,6 @@ public class QRServlet extends HttpServlet {
             } else {
                 String status = QRServletConstants.Status.COMPLETED.name();
                 addToContext(sessionDataKey, status, username, tenantDomain);
-//                qrDataStoreInstance.updateAuthStatus(sessionDataKey, status);
 
                 response.setStatus(HttpServletResponse.SC_ACCEPTED);
 
@@ -115,8 +109,6 @@ public class QRServlet extends HttpServlet {
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
         AuthenticationContext context = contextManager.getContext(sessionDataKey);
 
- //       context.setProperty(QRServletConstants.AUTH_STATUS, status);
-
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setUserName(username);
         authenticatedUser.setTenantDomain(tenantDomain);
@@ -124,11 +116,6 @@ public class QRServlet extends HttpServlet {
         context.setProperty(QRServletConstants.AUTH_STATUS, status);
         contextManager.storeContext(sessionDataKey, context);
 
-//        AuthDataDTO authDataDTO = (AuthDataDTO) context.getProperty(QRServletConstants.AUTH_DATA);
-//        authDataDTO.setTenantDomain(tenantDomain);
-//        authDataDTO.setUsername(username);
-//        context.setProperty(QRServletConstants.AUTH_DATA, authDataDTO);
-//        contextManager.storeContext(sessionDataKey, context);
     }
 
     private String getTenantQualifiedUsername() {
