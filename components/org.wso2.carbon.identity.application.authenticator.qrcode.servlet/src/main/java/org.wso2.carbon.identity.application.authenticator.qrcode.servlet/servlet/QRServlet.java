@@ -74,7 +74,6 @@ public class QRServlet extends HttpServlet {
                     QRServletConstants.ErrorMessages.ERROR_CODE_AUTH_RESPONSE_TOKEN_NOT_FOUND.toString());
         } else {
             String sessionDataKey = responseData.get(QRServletConstants.SESSION_DATA_KEY).getAsString();
-            String tenantDomain = responseData.get(QRServletConstants.TENANT_DOMAIN).getAsString();
             String username = getTenantQualifiedUsername();
 
             if (StringUtils.isEmpty(sessionDataKey)) {
@@ -87,7 +86,7 @@ public class QRServlet extends HttpServlet {
 
             } else {
                 String status = QRServletConstants.Status.COMPLETED.name();
-                addToContext(sessionDataKey, status, username, tenantDomain);
+                addToContext(sessionDataKey, status, username);
 
                 response.setStatus(HttpServletResponse.SC_ACCEPTED);
 
@@ -104,14 +103,13 @@ public class QRServlet extends HttpServlet {
      * @param sessionDataKey Unique key to identify the session.
      * @param status         Authentication status of the user.
      */
-    private void addToContext(String sessionDataKey, String status, String username, String tenantDomain) {
+    private void addToContext(String sessionDataKey, String status, String username) {
 
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
         AuthenticationContext context = contextManager.getContext(sessionDataKey);
 
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setUserName(username);
-        authenticatedUser.setTenantDomain(tenantDomain);
+        AuthenticatedUser authenticatedUser =
+                AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(username);
 
         context.setProperty(QRServletConstants.AUTHENTICATED_USER, authenticatedUser);
         context.setProperty(QRServletConstants.AUTH_STATUS, status);
