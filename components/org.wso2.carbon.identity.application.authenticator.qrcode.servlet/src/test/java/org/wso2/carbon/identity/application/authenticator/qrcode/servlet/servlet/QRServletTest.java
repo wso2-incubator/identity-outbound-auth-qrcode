@@ -47,7 +47,6 @@ import static org.testng.Assert.assertThrows;
 import junit.framework.TestCase;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authenticator.qrcode.QRAuthenticator;
-import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
 import org.wso2.carbon.identity.application.authenticator.qrcode.servlet.QRServletConstants;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
 

@@ -39,7 +39,6 @@ import org.wso2.carbon.identity.application.authentication.framework.inbound.Inb
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.QRAuthContextManager;
 import org.wso2.carbon.identity.application.authenticator.qrcode.common.impl.QRAuthContextManagerImpl;
-import org.wso2.carbon.identity.application.authenticator.qrcode.dto.AuthDataDTO;
 import org.wso2.carbon.identity.core.ServiceURL;
 import org.wso2.carbon.identity.core.ServiceURLBuilder;
 
@@ -80,9 +79,6 @@ public class QRAuthenticatorTest {
     private HttpServletRequest httpServletRequest;
 
     @Mock
-    private AuthDataDTO authDataDTO;
-
-    @Mock
     private QRAuthContextManagerImpl qrAuthContextManagerImpl;
 
     @Mock
@@ -91,12 +87,9 @@ public class QRAuthenticatorTest {
     @Mock
     private ServiceURL serviceURL;
 
-    private AuthDataDTO authData;
-
     @BeforeMethod
     public void setUp() {
         qrAuthenticator = new QRAuthenticator();
-        authData = new AuthDataDTO();
         initMocks(this);
     }
 

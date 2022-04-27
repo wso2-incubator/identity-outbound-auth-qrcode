@@ -38,6 +38,7 @@ public class QRServletConstants {
      * Object holding authentication mobile response status.
      */
     public enum Status {
+
         COMPLETED, PENDING
     }
 
@@ -47,15 +48,15 @@ public class QRServletConstants {
     public enum ErrorMessages {
 
         ERROR_CODE_AUTH_RESPONSE_TOKEN_NOT_FOUND(
-                "PBA-15001",
+                "QBA-15001",
                 "The request did not contain an authentication response token"
         ),
         ERROR_CODE_SESSION_DATA_KEY_NOT_FOUND(
-                "PBA-15002",
+                "QBA-15002",
                 "Authentication response token received from device: %s does not contain a session data key."
         ),
         ERROR_CODE_WEB_SESSION_DATA_KEY_NOT_FOUND(
-                "PBA-15007",
+                "QBA-15003",
                 "Error occurred when checking authentication status. The session data key was null or "
                         + "the HTTP request was not supported."
         );

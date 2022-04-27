@@ -112,10 +112,10 @@ public class QRServlet extends HttpServlet {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setUserName(username);
         authenticatedUser.setTenantDomain(tenantDomain);
+
         context.setProperty(QRServletConstants.AUTHENTICATED_USER, authenticatedUser);
         context.setProperty(QRServletConstants.AUTH_STATUS, status);
         contextManager.storeContext(sessionDataKey, context);
-
     }
 
     private String getTenantQualifiedUsername() {

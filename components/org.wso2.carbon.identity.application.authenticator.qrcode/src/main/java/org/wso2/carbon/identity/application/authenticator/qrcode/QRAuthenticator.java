@@ -115,13 +115,12 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
                                                  AuthenticationContext context) {
 
         QRAuthContextManager contextManager = new QRAuthContextManagerImpl();
-        AuthenticationContext sessionContext = contextManager.getContext(request
-                .getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY));
+        String sessionDataKey = request.getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY);
+        AuthenticationContext sessionContext = contextManager.getContext(sessionDataKey);
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) sessionContext
                 .getProperty(QRAuthenticatorConstants.AUTHENTICATED_USER);
 
         context.setSubject(authenticatedUser);
-
     }
 
     /**
