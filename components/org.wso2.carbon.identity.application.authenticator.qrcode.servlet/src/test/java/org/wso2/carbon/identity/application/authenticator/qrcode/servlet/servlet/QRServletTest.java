@@ -17,7 +17,6 @@
  *
  */
 
-
 package org.wso2.carbon.identity.application.authenticator.qrcode.servlet.servlet;
 
 import org.mockito.Mock;

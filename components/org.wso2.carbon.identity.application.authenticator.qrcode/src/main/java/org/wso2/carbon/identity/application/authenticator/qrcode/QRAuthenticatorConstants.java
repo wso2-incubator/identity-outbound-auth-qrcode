@@ -40,6 +40,7 @@ public abstract class QRAuthenticatorConstants {
      * Object holding authentication mobile response status.
      */
     public enum Status {
+
         COMPLETED, PENDING
     }
 }

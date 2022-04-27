@@ -79,9 +79,9 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
     /**
      * Redirect user to QR code page for login.
      *
-     * @param response The response.
+     * @param response       The response.
      * @param sessionDataKey The session data key.
-     * @throws AuthenticationFailedException  If unable to redirect user to login page.
+     * @throws AuthenticationFailedException If unable to redirect user to login page.
      */
     protected void redirectQRPage(HttpServletResponse response, String sessionDataKey, String tenantDomain)
             throws AuthenticationFailedException {
@@ -154,7 +154,7 @@ public class QRAuthenticator extends AbstractApplicationAuthenticator implements
     @Override
     public String getContextIdentifier(HttpServletRequest request) {
 
-        return request.getParameter("sessionDataKey");
+        return request.getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY);
     }
 
     /**

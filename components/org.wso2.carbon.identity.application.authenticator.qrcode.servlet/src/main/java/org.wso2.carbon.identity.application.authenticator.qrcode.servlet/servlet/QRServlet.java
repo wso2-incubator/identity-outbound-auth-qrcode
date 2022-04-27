@@ -102,7 +102,7 @@ public class QRServlet extends HttpServlet {
      * Add the received auth response details to the authentication context.
      *
      * @param sessionDataKey Unique key to identify the session.
-     * @param status   Authentication status of the user.
+     * @param status         Authentication status of the user.
      */
     private void addToContext(String sessionDataKey, String status, String username, String tenantDomain) {
 

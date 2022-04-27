@@ -136,15 +136,10 @@
                             org.wso2.carbon.identity.application.authenticator.qrcode.servlet,
                             org.wso2.carbon.identity.application.authenticator.qrcode.servlet.model,
                             org.wso2.carbon.identity.application.authenticator.qrcode.servlet.servlet,
-                            org.wso2.carbon.identity.application.authenticator.qrcode.servlet.store,
-                            org.wso2.carbon.identity.application.authenticator.qrcode.servlet.store.impl,
                         </Export-Package>
                         <Import-Package>
                             com.google.gson;version="${com.googlecode.json-simple.version}",
-                            com.nimbusds.jose;version="${com.nimbusds.version.range}",
-                            com.nimbusds.jwt;version="${com.nimbusds.version.range}",
                             org.wso2.carbon.identity.application.authentication.framework.context;version="${org.wso2.carbon.identity.version.range}",
-                            org.wso2.carbon.identity.application.authentication.framework.inbound;version="${org.wso2.carbon.identity.version.range}",
                             javax.servlet;version= "${javax.version.range}",
                             javax.servlet.http;version="${javax.version.range}",
                             org.apache.commons.lang;version="${org.apache.commons.lang.version.range}",
@@ -152,11 +147,14 @@
                             org.eclipse.equinox.http.helper,
                             org.osgi.service.component;version="${org.osgi.service.version.range}",
                             org.osgi.service.http;version="${org.osgi.service.version.range}",
-                            org.wso2.carbon.context;version="${carbon.kernel.package.import.version.range}",
+                            org.wso2.carbon.context; version="${carbon.kernel.package.import.version.range}",
                             org.wso2.carbon.identity.application.authenticator.qrcode.common,
                             org.wso2.carbon.identity.application.authenticator.qrcode.common.impl,
-                            org.wso2.carbon.identity.application.authenticator.qrcode.common.exception,
                             org.wso2.carbon.user.core.util; version="${carbon.kernel.package.import.version.range}",
+                            com.nimbusds.jose;version="${com.nimbusds.version.range}",
+                            com.nimbusds.jwt;version="${com.nimbusds.version.range}",
+                            org.wso2.carbon.identity.application.authentication.framework.inbound;version="${org.wso2.carbon.identity.version.range}",
+                            org.wso2.carbon.identity.application.authenticator.qrcode.common.exception,
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>

@@ -48,7 +48,7 @@ public class QRAuthContextCache extends
     /**
      * Store authentication context to the session data store.
      *
-     * @param id SessionDataKey for the session.
+     * @param id    SessionDataKey for the session.
      * @param entry QRAuthContextCacheEntry containing QR authentication context.
      */
     private void storeToSessionStore(String id, QRAuthContextCacheEntry entry) {
@@ -91,7 +91,7 @@ public class QRAuthContextCache extends
     /**
      * Add the authentication context to cache by the SessionDataKey.
      *
-     * @param key QRAuthenticationContextKey with SessionDataKey.
+     * @param key   QRAuthenticationContextKey with SessionDataKey.
      * @param entry QRAuthenticationCacheEntry containing authentication context.
      */
     public void addToCacheByRequestId(QRAuthContextCacheKey key,

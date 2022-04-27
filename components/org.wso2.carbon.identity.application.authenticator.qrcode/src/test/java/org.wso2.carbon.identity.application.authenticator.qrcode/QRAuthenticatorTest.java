@@ -145,9 +145,6 @@ public class QRAuthenticatorTest {
 //        Whitebox.invokeMethod(qrAuthenticator, "processAuthenticationResponse", httpServletRequest, httpServletResponse, context);
 //        Assert.assertEquals(context.getSubject(), authenticatedUser);
 
-
-
-
 //            whenNew(QRAuthContextManagerImpl.class).withNoArguments().thenReturn(qrAuthContextManagerImpl);
 //            when(httpServletRequest.getParameter(QRAuthenticatorConstants.SESSION_DATA_KEY)).thenReturn("234567890");
 //            when(qrAuthContextManagerImpl.getContext("234567890")).thenReturn(mockedContext);
