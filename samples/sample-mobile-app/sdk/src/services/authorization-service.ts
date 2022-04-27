@@ -16,7 +16,6 @@
  * under the License.
  */
 
-import uuid from "uuid-random";
 import {AuthRequestInterface} from "../models";
 import {DateTimeUtil, RequestSenderUtil} from "../utils";
 
@@ -28,7 +27,7 @@ export class AuthorizationService {
      * @param request JSON object of the request.
      */
     public static processAuthRequest(
-        request: any
+        request: string
     ): AuthRequestInterface {
 
         let requestData = request.split("=");
@@ -37,16 +36,14 @@ export class AuthorizationService {
 
         let authRequest: AuthRequestInterface;
 
-   
             if (sessionDataKey) {
-                authRequest = {   
+                authRequest = {
                     sessionDataKey: sessionDataKey,
                     tenantDomain: tenantDomain,
                 };
             } else {
-    
                 throw new Error("One or more required parameters (tenantDomain, sessionDataKey) was not found.");
-            }      
+            }
 
         return authRequest;
     }
@@ -57,19 +54,20 @@ export class AuthorizationService {
      * @param authRequest Object for the authentication request.
      * @param token Access token of the user.
      * @param response Authorisation response given by the user.
+     * @param authEndpoint Authentication endpoint.
      */
     public static async sendAuthRequest(
         authRequest: AuthRequestInterface,
         token: any,
-        response: string
+        response: string,
+        authEndpoint: string
     ): Promise<any> {
 
         const timestamp = new DateTimeUtil();
 
         const authResponse = {
             sessionDataKey: authRequest.sessionDataKey,
-            tenantDomain: authRequest.tenantDomain,
-            clientID: "zCoVxvKyxRtKTytoszh7kffTKV8a"
+            tenantDomain: authRequest.tenantDomain
         };
 
         const headers = {
@@ -82,7 +80,7 @@ export class AuthorizationService {
             authResponse: authResponse
         };
 
-        const authUrl = "https://192.168.1.3:9443/qr-auth/authenticate";
+        const authUrl = authEndpoint;
 
         const request = new RequestSenderUtil();
         const result: Promise<any> = request.sendRequest(
@@ -105,5 +103,4 @@ export class AuthorizationService {
             return JSON.stringify({res: result, data: authRequest});
         });
     }
-
 }

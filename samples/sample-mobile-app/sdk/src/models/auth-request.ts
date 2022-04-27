@@ -24,8 +24,6 @@ import {DateTimeInterface} from "./date-time";
 export interface AuthRequestInterface {
     sessionDataKey: string;
     tenantDomain?: string;
-    host?: string;
-    connectionCode?: string;
     expiryTime?: string;
     authenticationStatus?: string;
     requestTime?: DateTimeInterface;
