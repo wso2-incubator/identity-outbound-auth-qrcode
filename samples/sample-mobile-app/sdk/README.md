@@ -32,7 +32,7 @@ Native, that can be used for authenticating with WSO2 Identity Server.
 
 For npm
 ```
-$ npm install @wso2/auth-qr-react-native
+npm install @wso2/auth-qr-react-native
 ```
 For yarn
 ```
