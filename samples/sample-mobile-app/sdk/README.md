@@ -36,7 +36,7 @@ npm install @wso2/auth-qr-react-native
 ```
 For yarn
 ```
-$ yarn add @wso2/auth-qr-react-native
+yarn add @wso2/auth-qr-react-native
 ```
 
 For installing on iOS
