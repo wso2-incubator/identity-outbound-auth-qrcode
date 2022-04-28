@@ -22,22 +22,28 @@ import { RNCamera } from 'react-native-camera';
 import { useLoginContext } from "../../context/LoginContext";
 import {AuthorizationService} from '@wso2/auth-qr-react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
+import { default as authConfig } from "../config.json";
 
 const QRScannerScreen = ({ navigation }) => {
 
-    const { loginState, setLoginState, loading, setLoading } = useLoginContext();
+    const { loginState } = useLoginContext();
+
+    enum response {
+        succcess = "SUCCUSSFUL",
+        denied = "DENIED"
+    }
 
     let onSuccess = (qrData) => {
 
         ReactNativeBiometrics.isSensorAvailable().then(resultObject => {
             const {available, biometryType} = resultObject;
-          
+
             if (available && biometryType === ReactNativeBiometrics.TouchID) {
               console.log('TouchID is supported');
-          
+
             } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
               console.log('FaceID is supported');
-          
+
             } else if (available && biometryType === ReactNativeBiometrics.Biometrics) {
               console.log('Biometrics is supported');
               try{
@@ -46,17 +52,17 @@ const QRScannerScreen = ({ navigation }) => {
                 })
                     .then(resultObject => {
                     const {success} = resultObject;
-                
+
                     if (success) {
                         console.log('successful biometrics provided');
                         sendRequestToSDK(qrData);
-                
+
                     } else {
                         console.log('user cancelled biometric prompt');
                     }
                     })
                     .catch(() => {
-                    console.log('biometrics failed');
+                        console.log('biometrics failed');
                     });
                 }
                 catch(e){
@@ -70,7 +76,7 @@ const QRScannerScreen = ({ navigation }) => {
 
     let sendRequestToSDK = (qrData) => {
         let authData = AuthorizationService.processAuthRequest(qrData.data);
-        AuthorizationService.sendAuthRequest(authData, loginState.accessToken, 'SUCCESSFUL')
+        AuthorizationService.sendAuthRequest(authData, loginState.accessToken, response.succcess, authConfig.authEndpoint )
             .then((res) => {
                 let response = JSON.parse(res);
                 console.log(
@@ -78,15 +84,11 @@ const QRScannerScreen = ({ navigation }) => {
                     response.data.authenticationStatus,
                 );
 
-                if (response.res == 'OK') {
+                if (response.res === 'OK') {
                     console.log(
                         'Activity data at success: ' + JSON.stringify(authData),
                     );
                 }
-
-                // navigation.navigate(
-                //     response.res == 'OK' ? 'Main' : 'Authorization Failed',
-                // );
             })
             .catch((err) => {
                 console.log('Send auth error: ' + err);

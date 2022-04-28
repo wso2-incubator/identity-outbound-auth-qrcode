@@ -17,20 +17,20 @@
  */
 
 import React from 'react';
-import {View, StyleSheet, StatusBar, Image} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import GridImageView from 'react-native-grid-image-viewer';
 
 const GalleryScreen = ({ navigation }) => {
 
     return (
     <>
-    <StatusBar barStyle={'dark-content'} />
-      <View style={styles.background}>
-      <GridImageView data={[
-      'https://source.unsplash.com/2ShvY8Lf6l0/800x599',
-      'https://source.unsplash.com/Dm-qxdynoEc/800x799',
-      'https://source.unsplash.com/qDkso9nvCg0/600x799',
-      'https://source.unsplash.com/iecJiKe_RNg/600x799',
+    <StatusBar barStyle = {'dark-content'} />
+      <View style = {styles.background}>
+      <GridImageView data = {[
+       'https://source.unsplash.com/2ShvY8Lf6l0/800x599',
+       'https://source.unsplash.com/Dm-qxdynoEc/800x799',
+       'https://source.unsplash.com/qDkso9nvCg0/600x799',
+       'https://source.unsplash.com/iecJiKe_RNg/600x799',
        'https://source.unsplash.com/epcsn8Ed8kY/600x799',
        'https://source.unsplash.com/NQSWvyVRIJk/800x599',
        'https://source.unsplash.com/zh7GEuORbUw/600x799',

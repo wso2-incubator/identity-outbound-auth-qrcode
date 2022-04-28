@@ -19,17 +19,10 @@
 import "text-encoding-polyfill";
 import React, {useEffect} from 'react';
 import { useAuthContext } from "@asgardeo/auth-react-native";
-import { Button, Image, Linking, Text, View, ActivityIndicator, TouchableOpacity } from "react-native";
+import { Image, Text, View, ActivityIndicator, TouchableOpacity } from "react-native";
 import { styles } from "../components/stylesheet";
 import { initialState, useLoginContext } from "../../context/LoginContext";
-
-// Create a config object containing the necessary configurations.
-const config = {
-    clientID: "zCoVxvKyxRtKTytoszh7kffTKV8a",
-    serverOrigin: "https://192.168.1.3:9443",
-    signInRedirectURL: "wso2sample://oauth2",
-    validateIDToken: false
-};
+import { default as authConfig } from "../config.json";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; }; }) => {
@@ -41,7 +34,7 @@ const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; };
      * This hook will initialize the auth provider with the config object.
      */
     useEffect(() => {
-        initialize(config);
+        initialize(authConfig.config);
     }, []);
 
     /**
@@ -49,7 +42,6 @@ const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; };
      */
     useEffect(() => {
         if (state?.isAuthenticated) {
-        console.log("authenticated user");
             const getData = async () => {
                 try {
                     const basicUserInfo = await getBasicUserInfo();
@@ -72,7 +64,7 @@ const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; };
             getData();
         }else if (loginState.hasLogoutInitiated) {
             setLoginState(initialState);
-             props.navigation.navigate("Login");
+            props.navigation.navigate("Login");
         }
     }, [ state.isAuthenticated ]);
 
@@ -80,7 +72,6 @@ const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; };
      * This function will be triggered upon login button click.
      */
     const handleSubmitPress = async () => {
-        console.log("Login Clicked");
         setLoading(true);
         signIn()
             .catch((error) => {
@@ -100,7 +91,7 @@ const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; };
                             style = { styles.image }
                         />
                         <Text style = { styles.textpara }>
-                        Welcome To photoGallery !
+                            Welcome To photoGallery !
                         </Text>
                     </View>
                     <View style = { styles.buttonContainer }>
@@ -115,7 +106,6 @@ const LoginScreen = (props: { navigation: { navigate: (arg0: string) => void; };
                                 <ActivityIndicator size="large" color="#FF8000" />
                             </View>) : null
                     }
-                    
                 </View>
             </View>
         </View>
