@@ -36,14 +36,14 @@ export class AuthorizationService {
 
         let authRequest: AuthRequestInterface;
 
-            if (sessionDataKey) {
-                authRequest = {
-                    sessionDataKey: sessionDataKey,
-                    tenantDomain: tenantDomain,
-                };
-            } else {
-                throw new Error("One or more required parameters (tenantDomain, sessionDataKey) was not found.");
-            }
+        if (sessionDataKey) {
+            authRequest = {
+                sessionDataKey: sessionDataKey,
+                tenantDomain: tenantDomain,
+            };
+        } else {
+            throw new Error("One or more required parameters (tenantDomain, sessionDataKey) was not found.");
+        }
 
         return authRequest;
     }

@@ -17,6 +17,7 @@
  */
 
 import {fetch} from "react-native-ssl-pinning";
+import { Logger } from "./logger-util";
 
 /**
  * Util class for handling http requests.
@@ -48,12 +49,10 @@ export class RequestSenderUtil {
             body: body
         })
             .then((response: any) => {
-
                 return response;
             })
             .catch((err: any) => {
-                console.log(`error: ${err.status}`);
-
+                Logger.debug("error: " + err.status);
                 return "FAILED";
             });
     }

@@ -34,21 +34,8 @@ export class DateTimeUtil {
             hour: current.getHours(),
             minute: current.getMinutes(),
             seconds: current.getSeconds(),
-            date:
-                current.getDate() +
-                "-" +
-                current.getMonth() +
-                "-" +
-                current.getFullYear(),
-            time:
-                (current.getHours() < 12
-                    ? current.getHours()
-                    : current.getHours() - 12) +
-                ":" +
-                current.getMinutes() +
-                (current.getHours() < 12)
-                    ? " a.m."
-                    : " p.m."
+            date: current.toLocaleDateString(),
+            time: current.toLocaleTimeString()
         };
     }
 
