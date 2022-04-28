@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.com) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,7 +16,13 @@
  * under the License.
  */
 
-export * from "./request-sender-util";
-export * from "./date-time-util";
-export * from "./logger-util";
-export * from "./logger-config";
+ export const LOGGER_CONFIG = {
+    bgGreen: "\x1b[42m",
+    bgRed: "\x1b[41m",
+    bgYellow: "\x1b[43m",
+    fgBlack: "\x1b[30m",
+    fgGreen: "\x1b[32m",
+    fgRed: "\x1b[31m",
+    fgYellow: "\x1b[33m",
+    reset: "\x1b[0m"
+}
