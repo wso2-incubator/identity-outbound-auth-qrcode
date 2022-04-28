@@ -19,6 +19,7 @@
 /* eslint-disable no-console */
 
 import { LOGGER_CONFIG } from "./logger-config";
+
 export class Logger {
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
