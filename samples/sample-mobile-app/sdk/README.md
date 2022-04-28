@@ -41,7 +41,7 @@ yarn add @wso2/auth-qr-react-native
 
 For installing on iOS
 ```
-$ cd ios && pod install
+cd ios && pod install
 ```
 
 ## Build Package and Install
